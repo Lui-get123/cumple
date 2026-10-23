@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 25%, #ffc3a0 50%, #ffafbd 75%, #ffc3a0 100%);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  overflow: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+.envelope-container {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.envelope-flap {
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 10;
+}
+
+.envelope-flap.open {
+  transform: rotateX(180deg);
+  z-index: 0;
+}
+
+.letter {
+  transform-origin: bottom center;
+  transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 5;
+}
+
+.letter.sliding-out {
+  /* transform controlled inline */
+}
+
+.letter.expanded {
+  /* transform controlled inline */
+}
+
+.envelope-shadow {
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.25));
+}
+
+.heart {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ff6b9d;
+  transform: rotate(45deg);
+  animation: floatUp 3s ease-in forwards;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ff6b9d;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -5px;
+  left: 0;
+}
+
+.heart::after {
+  top: 0;
+  left: -5px;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: rotate(45deg) translateY(0) scale(0);
+  }
+  10% {
+    opacity: 1;
+    transform: rotate(45deg) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(45deg) translateY(-200px) scale(0.5);
+  }
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  animation: confettiFall 3s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(300px) rotate(720deg);
+  }
+}
+
+/* ============ CLICK EFFECTS: SPARKS (FIREWORK-LIKE) ============ */
+.spark {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: sparkBurst 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sparkBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  70% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.2);
+  }
+}
+
+/* ============ CLICK EFFECTS: RIPPLE ============ */
+.click-ripple {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  border: 2px solid rgba(255, 107, 157, 0.7);
+  animation: rippleExpand 0.9s ease-out forwards;
+}
+
+@keyframes rippleExpand {
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.2);
+    border-width: 3px;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3.5);
+    border-width: 1px;
+  }
+}
+
+/* ============ CLICK EFFECTS: FLOATING HEART FROM CLICK ============ */
+.click-heart {
+  position: absolute;
+  pointer-events: none;
+  animation: clickHeartFloat 1.8s ease-out forwards;
+  filter: drop-shadow(0 2px 6px rgba(255, 107, 157, 0.45));
+}
+
+@keyframes clickHeartFloat {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -90%) scale(1.1) rotate(-8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--hx)), -320%) scale(0.9) rotate(var(--hr));
+  }
+}
+
+/* ============ STAR TWINKLE (for Lucide stars) ============ */
+.lucide-twinkle {
+  animation: lucideTwinkle 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8));
+}
+
+@keyframes lucideTwinkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.45; transform: scale(0.78) rotate(15deg); }
+}
+
+/* ============ SLOW FLOAT (for balloons) ============ */
+.lucide-float {
+  animation: lucideFloat 6.5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.15));
+}
+
+@keyframes lucideFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-18px) rotate(3deg); }
+}
+
+/* ============ Wax seal shine ============ */
+.seal-shine {
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 45%),
+    radial-gradient(circle at 28% 28%, #ff7686 0%, #ee0979 55%, #b30059 100%);
+}
